@@ -1,36 +1,42 @@
 # Basic Practice
 
 ## Modules
-1. Country
-2. City
-3. Address
+1. Users
+2. Departments
+3. Shift
 
-### Country
-Create CRUD for country.
+### Users
+Create CRUD for Users.
 
 Database fields are:
   - id
-  - name
+  - first_name
+  - last_name
+  - email
+  - number
+  - department_id (foreign key of department, not null)
+  - role
+  - password
   - createdAt (datetime)
   - updatedAt (datetime)
 
 ##### Listing page 
 
-ID | Name | Action
------|-------|-------
-1 | India | Edit Delete
-2 | UK | Edit Delete
+ID | Name | Email | Role | Reporting To | Action
+-----|-------|--------------------|----------------------|-------------|-------
+1 | Harshil Amreliya | harshil.a@simformsolutions.com | software engineer | Chintan Dave | Edit Delete
+2 | Dhyanam Trivedi | dhyanam.t@simformsolutions.com | Sr.software engineer | Bhavin Nakrani | Edit Delete
 
-* Search by Name using like query
-* In Edit, we can change name of country.
+* Dropdown for role column to change role. (This column should visible for Team leader and admin only)
+* In Edit, user can change name and only admin can change role to users, Team leader can change role to there team members.
+* send email and text message notification when user added or role changes.
 
-### City
-Create CRUD layout for City. Require to implement Listing, Add, Edit and Delete action.
+### Departments
+Create CRUD layout for Departments. Require to implement Listing, Add, Edit and Delete action.
 
 Database fields are:
   - id  (primary)
   - name   (string, not null)
-  - country_id (foreign key of country, not null)
   - active (boolean, by default true)
   - createdAt (datetime)
   - updatedAt (datetime)
@@ -38,60 +44,49 @@ Database fields are:
 
 ###### Listing page should like this:
 
-ID | Name    | Country          | Status     | Action
---- |--------|------------------|------------| ----------
-1 | Ahmedabad | India            | Active     | Edit Delete 
-2 | Surat     | India | Not Active | Edit Delete 
+ID | Name     | Status     | Action
+--- |---------|------------| ----------
+1 | Open Source | Active   | Edit Delete 
+2 | Mean     | Not Active | Edit Delete 
 
-* Search by Name should have like query. And user can search by status dropdown too.
-* Search by Country dropdown
-* In form, Name field must be required with server side validation
+* Switch button for status change.
 * use softdelete for deleteing record.
-* Display flash message in listing page when any event happen. i.e. City name changed successfully
+* Display flash message in listing page when any event happen. i.e. Department status updated
 
-###### Add Form
+### Shift
+Create CRUD for Shift module. Team leader can add, edit, delete shifts.
 
-Country | Dropdown of country name | ---
--------|--------------------------| ----
-Name | textbox                  | Add More
-Active | checkbox                 | default selected
-
-* When click on Add More button, it's open more name fields, so we can insert multiple city for selected country.
-* If more textbox open, there is Delete option too, so we can remove city if not want to create it.
-* At-least one city value must require
-
-###### Edit Form
-Country | Dropdown
-------- | --------
-Name | textbox
-Active | checkbox
-
-### Address
-Create CRUD for address module. User can add, edit, delete address.
+Database fields are:
+  - id  (primary)
+  - owner_id  (foreign key of users, not null)
+  - team_leader_id  (foreign key of users, not null)
+  - start_time (string, not null)
+  - end_time (string, not null)
+  - createdAt (datetime)
+  - updatedAt (datetime)
+  - DeletedAt (datetime)
 
 ##### Listing page
-Id | Street Name | Postcode | City | Country | Action
+Id | owner | Repoting | Start Time | End Time | Action
 ---| ---------- | ---------- | ------ | ------ | ------
-1 | Gold Plaza | 525632 | Ahmedabad | India | Edit Delete
+1 | Test User | Harshil Amreliya | 09:00 | 06:00 | Edit Delete
 
-##### Add/Edit Form
 
-Country | dropdown
---------|--------
-City | dropdown
-Street Name | textarea
-Postcode | textbox 
-
-* Only load city which are related to selected country.
-* Country/City dropdown will work with javascript, Also handle it's form value by Form Events
-* Allow only number value in postcode field.
-* Street value require.
+* Reproting manager, team lead, and admin can change shift in higherkey.
+* send nofitification of shift update and creation.
 
 ## Authentication
 
 * create authentication and provide role to user. i.e admin, supervisor.
 * country record can deleted by admin only, other delete can be performed by supervisor. (authorization)
 
+## Cron
+
+* creat cron job for users to send notification next day shift timeing through mail and text message.
+* One cron to send weekly total payment hours * 1000 * weekdays.
+
 ## Doc
 
 Detail information: https://laravel.com/docs
+
+Role management librery: https://spatie.be/docs/laravel-permission/v5/introduction
